@@ -1,34 +1,21 @@
-// module.exports = 
-function zeros(expression) {
-  let result = 0;
-  let product = 1;
-  let arr = expression.split('*');
-
-  for(let i = 0; i < arr.length; ++i) {
-    if(arr[i].substr(-2, 2) === '!!') {
-      // !!
-      for(let n = arr[i].slice(0, -2); n > 1; n -= 2) {
-        product *= n;
-      }
-    } else {
-      // !
-      for(let n = arr[i].slice(0, -1); n > 1; --n) {
-        product *= n;
-      }
-    }
-  }
-
-  console.log("product = " + product);
+module.exports = function zeros(expression) {
+  //we get 0 at the of the product when we had pair of 2 and 5 as factors
+  let twos = 0;
+  let fives = 0;
+  let factorial = expression.split('*');
   
-  while(product > 10) {
-    if(!Math.floor(product % 10))
-      result++;
-    product /= 10;
+  for(let i = 0; i < factorial.length; ++i) {
+    let factorialSign = 1; // n!
+    if(factorial[i].substr(-2, 2) === '!!')
+      factorialSign = 2; // n!!
+      
+      for(let n = factorial[i].slice(0, -factorialSign); n > 1; n -= factorialSign) {
+        for(let m = n; m % 5 === 0 && m >= 5; m /= 5)
+          fives++;
+        for(let m = n; m % 2 === 0 && m >= 2; m /= 2)
+          twos++;
+      }
   }
   
-  console.log("result = " + result);
-
-  return result;
+  return Math.min(fives, twos);
 }
-
-zeros('10!');
